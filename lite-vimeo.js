@@ -277,7 +277,10 @@ export class LiteVimeoEmbed extends HTMLElement {
         // we don't know which image type to preload, so warm the connection
         LiteVimeoEmbed.addPrefetch('preconnect', 'https://i.vimeocdn.com/');
         // Hack to use the oEmbed API endpoint now that v2 is shut down
-        const apiUrl = `https://vimeo.com/api/oembed.json?url=https://vimeo.com/${this.videoId}`;
+        const videoUrl = this.videoHash
+            ? `https://vimeo.com/${this.videoId}/${this.videoHash}`
+            : `https://vimeo.com/${this.videoId}`;
+        const apiUrl = `https://vimeo.com/api/oembed.json?url=${encodeURIComponent(videoUrl)}`;
         // Now fetch the JSON that locates our placeholder from vimeo's JSON API
         const apiResponse = (await (await fetch(apiUrl)).json());
         // Extract the image id, e.g. 819916979, from a URL like:
